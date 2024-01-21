@@ -1,0 +1,40 @@
+@model ToDo.Models.TaskModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h1 class="text-center mb-4">Create Task</h1>
+
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label">Task Title</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group form-check">
+                    <input class="form-check-input" asp-for="IsDone" />
+                    <label class="form-check-label" for="IsDone">Is Done</label>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create Task</button>
+                </div>
+            </form>
+
+            <div class="text-center">
+                <a asp-action="Index" class="btn btn-secondary">Back to Task List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

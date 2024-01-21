@@ -1,0 +1,27 @@
+@model ToDo.Models.TaskModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <h1 class="card-header text-center">Task Details</h1>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Title</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Title)</dd>
+                        <dt class="col-sm-4">Is Done</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.IsDone)</dd>
+                    </dl>
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit Task</a>
+                    <a asp-action="Index" class="btn btn-secondary ml-2">Back to Task List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

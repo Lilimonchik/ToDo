@@ -1,0 +1,100 @@
+@model IEnumerable<ToDo.Models.TaskModel>
+
+@{
+    ViewData["Title"] = "Task List";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Task List</h1>
+    <p class="text-center">
+        <a asp-action="Create" class="btn btn-primary">Create New Task</a>
+    </p>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th class="text-center">
+                        @Html.DisplayNameFor(model => model.IsDone)
+                    </th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model) {
+                    <tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td class="align-middle text-center">
+                            <label class="isDoneCheckbox" data-id="@item.Id">
+                                <input type="checkbox" id="isDoneCheckbox_@item.Id" @(item.IsDone ? "checked" : "")>
+                            </label>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section scripts {
+    <script>
+            $(document).ready(function () {
+                $('.isDoneCheckbox').on('click', function () {
+                    var checkbox = $(this).find('input[type="checkbox"]');
+                    var todoId = $(this).data('id');
+                    var isDone = !checkbox.prop('checked');
+    
+                    $.ajax({
+                        url: '/Task/ToggleIsDone/' + todoId,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ IsDone: isDone }),
+                        cache: false,
+                        success: function (data) {
+                            if (data.success) {
+                                checkbox.prop('checked', data.isDone); // Update checkbox state based on server response
+                            } else {
+                                console.error('Failed to update IsDone status.');
+                            }
+                        },
+                        error: function () {
+                            console.error('Failed to communicate with the server.');
+                        }
+                    });
+                });
+            });
+        </script>
+}
+    <style>
+            body {
+                background-color: #f8f9fa;
+            }
+    
+            h1 {
+                color: #007bff;
+            }
+    
+            .btn {
+                margin-right: 5px;
+            }
+    
+            .isDoneCheckbox {
+                display: inline-block;
+                cursor: pointer;
+            }
+    
+            .isDoneCheckbox input {
+                margin: 0;
+            }
+        </style>
+    
+        <!-- Add Bootstrap CSS for styling -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
