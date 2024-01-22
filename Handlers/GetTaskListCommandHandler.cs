@@ -4,24 +4,35 @@ using MvcTask.Data;
 using ToDo.Commands;
 using ToDo.Models;
 
-namespace ToDo.Handlers
+public class GetSortedTaskListQueryHandler : IRequestHandler<GetTaskListCommand, IEnumerable<TaskModel>>
 {
-    // Handler for the GetTaskListCommand
-    public class GetTaskListCommandHandler : IRequestHandler<GetTaskListCommand, IEnumerable<TaskModel>>
+    private readonly MvcTaskContext _context;
+
+    public GetSortedTaskListQueryHandler(MvcTaskContext context)
     {
-        private readonly MvcTaskContext _context;
+        _context = context;
+    }
 
-        // Constructor with dependency injection
-        public GetTaskListCommandHandler(MvcTaskContext context)
+    public async Task<IEnumerable<TaskModel>> Handle(GetTaskListCommand request, CancellationToken cancellationToken)
+    {
+        var tasks = _context.TaskModel.AsQueryable();
+
+        switch (request.SortOrder)
         {
-            _context = context;
+            case "title_desc":
+                tasks = tasks.OrderByDescending(t => t.Title);
+                break;
+            case "isDone":
+                tasks = tasks.OrderBy(t => t.IsDone);
+                break;
+            case "isDone_desc":
+                tasks = tasks.OrderByDescending(t => t.IsDone);
+                break;
+            default:
+                tasks = tasks.OrderBy(t => t.Title);
+                break;
         }
 
-        // Handle method to process the GetTaskListCommand
-        public async Task<IEnumerable<TaskModel>> Handle(GetTaskListCommand request, CancellationToken cancellationToken)
-        {
-            // Retrieve the list of tasks from the database
-            return await _context.TaskModel.ToListAsync(cancellationToken);
-        }
+        return await tasks.ToListAsync();
     }
 }

@@ -277,3 +277,4 @@
 /Users/andrew/RiderProjects/ToDo/ToDo/obj/Debug/net8.0/ref/ToDo.dll
 /Users/andrew/RiderProjects/ToDo/ToDo/bin/Debug/net8.0/MediatR.dll
 /Users/andrew/RiderProjects/ToDo/ToDo/bin/Debug/net8.0/MediatR.Contracts.dll
+/Users/andrew/RiderProjects/ToDo/ToDo/obj/Debug/net8.0/ToDo.sourcelink.json

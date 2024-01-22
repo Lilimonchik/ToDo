@@ -20,10 +20,15 @@ namespace ToDo.Controllers
         }
 
         // GET: Task
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            // Using MediatR to send a command to get the list of tasks
-            return View(await _mediator.Send(new GetTaskListCommand()));
+            var query = new GetTaskListCommand() { SortOrder = sortOrder };
+            var model = await _mediator.Send(query);
+
+            ViewData["TitleSortParam"] = string.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
+            ViewData["IsDoneSortParam"] = sortOrder == "isDone" ? "isDone_desc" : "isDone";
+
+            return View(model);
         }
 
         // GET: Task/Details/5

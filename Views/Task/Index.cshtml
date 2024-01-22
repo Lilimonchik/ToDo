@@ -14,10 +14,14 @@
             <thead class="thead-dark">
                 <tr>
                     <th class="text-center">
-                        @Html.DisplayNameFor(model => model.Title)
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["TitleSortParam"]">
+                            Title
+                        </a>
                     </th>
                     <th class="text-center">
-                        @Html.DisplayNameFor(model => model.IsDone)
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["IsDoneSortParam"]">
+                            Is Done
+                        </a>
                     </th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -69,6 +73,23 @@
                             console.error('Failed to communicate with the server.');
                         }
                     });
+                });
+            });
+        </script>
+    <script>
+            $(document).ready(function () {
+                $('.table th a').on('click', function () {
+                    var url = new URL(window.location.href);
+                    var sortOrder = url.searchParams.get("sortOrder");
+    
+                    if (!sortOrder || sortOrder === "title_desc") {
+                        sortOrder = "title";
+                    } else {
+                        sortOrder = "title_desc";
+                    }
+    
+                    url.searchParams.set("sortOrder", sortOrder);
+                    window.location.href = url.toString();
                 });
             });
         </script>
